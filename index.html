@@ -18,7 +18,7 @@
     <div id="start-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-950/95 p-4">
         <div class="max-w-md w-full bg-slate-900 p-6 rounded-3xl border border-blue-500/30 text-center glow-box">
             <div class="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden border-4 border-amber-400 shadow-lg">
-                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=300&q=80" alt="Професор Сова" class="w-full h-full object-cover">
+                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80" alt="Ведучий" class="w-full h-full object-cover">
             </div>
             <h1 class="text-2xl font-extrabold mb-2 text-amber-400">
                 Масова частка розчиненої речовини
@@ -33,15 +33,15 @@
     <!-- ОСНОВНИЙ ІГРОВИЙ ІНТЕРФЕЙС -->
     <div id="game-screen" class="hidden flex-1 flex flex-col justify-between max-w-4xl mx-auto w-full h-full py-1">
         
-        <!-- ВЕРХНЯ ПАНЕЛЬ: СОВА, РІВЕНЬ, ЗІРКИ, ТАЙМЕР -->
+        <!-- ВЕРХНЯ ПАНЕЛЬ: ВЕДУЧИЙ, РІВЕНЬ, ЗІРКИ, ТАЙМЕР -->
         <header class="flex justify-between items-center bg-slate-900/80 border border-blue-500/20 px-4 py-2 rounded-2xl shadow-md">
             <div class="flex items-center gap-3">
                 <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-amber-400 shrink-0">
-                    <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=150&q=80" alt="Сова" class="w-full h-full object-cover">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&q=80" alt="Ведучий" class="w-full h-full object-cover">
                 </div>
                 <div>
                     <span id="level-badge" class="text-xs font-bold text-blue-400 uppercase tracking-wide block">Level 1 of 12</span>
-                    <span class="text-xs text-slate-300 font-semibold">Професор Сова</span>
+                    <span id="host-dialogue" class="text-xs text-slate-300 font-semibold italic">Let's start easy.</span>
                 </div>
             </div>
             
@@ -58,14 +58,14 @@
 
         <!-- ЦЕНТРАЛЬНА ЧАСТИНА: ЗАПИТАННЯ ТА ВАРІАНТИ -->
         <main class="my-auto flex flex-col gap-3 w-full">
-            <!-- Картка запитання (Великий текст) -->
+            <!-- Картка запитання -->
             <div class="bg-slate-900/90 border border-blue-500/40 p-4 md:p-6 rounded-2xl shadow-xl text-center">
                 <h2 id="question-text" class="text-lg md:text-2xl font-bold leading-snug text-white">
                     Завантаження запитання...
                 </h2>
             </div>
 
-            <!-- Варіанти відповідей (Великі клікабельні блоки) -->
+            <!-- Варіанти відповідей -->
             <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <!-- Заповнюється через JS -->
             </div>
@@ -91,7 +91,7 @@
         </footer>
     </div>
 
-    <!-- МОДАЛЬНЕ ВІКНО -->
+    <!-- МОДАЛЬНЕ ВІКНО ПОВІДОМЛЕНЬ -->
     <div id="modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
         <div class="bg-slate-900 border border-blue-500/40 max-w-sm w-full p-6 rounded-3xl text-center glow-box">
             <h3 id="modal-title" class="text-xl font-bold mb-2 text-amber-400">Повідомлення</h3>
@@ -105,7 +105,7 @@
     <script>
         const questions = [
             {
-                level: 1, prize: 10, safe: false,
+                level: 1, prize: 10, host: "Let's start easy.",
                 question: "Що таке масова частка розчиненої речовини?",
                 options: [
                     "А) Відношення об'єму речовини до об'єму розчину",
@@ -117,7 +117,7 @@
                 clue: "Масова частка дорівнює масі розчиненої речовини, поділеній на загальну масу розчину."
             },
             {
-                level: 2, prize: 20, safe: false,
+                level: 2, prize: 20, host: "On to level 2.",
                 question: "У яких одиницях найчастіше виражають масову частку?",
                 options: [
                     "А) У молях на літр",
@@ -129,70 +129,70 @@
                 clue: "Масова частка є безрозмірною величиною і виражається у вигляді десяткового дробу або відсотків (%)"
             },
             {
-                level: 3, prize: 30, safe: false,
+                level: 3, prize: 30, host: "Keep going!",
                 question: "Обчисліть масу розчину, якщо він складається з 10 г солі та 90 г води.",
                 options: ["А) 100 г", "Б) 80 г", "В) 110 г", "Г) 90 г"],
                 correct: 0,
                 clue: "Маса розчину дорівнює сумі маси розчиненої речовини та розчинника: 10 + 90 = 100 г."
             },
             {
-                level: 4, prize: 40, safe: true,
+                level: 4, prize: 40, host: "First safe checkpoint!",
                 question: "Яка масова частка солі в розчині, де 20 г солі розчинено у 180 г води?",
                 options: ["А) 10%", "Б) 5%", "В) 11.1%", "Г) 20%"],
                 correct: 0,
                 clue: "Маса розчину = 20 + 180 = 200 г. Частка = 20 / 200 = 0.1 або 10%."
             },
             {
-                level: 5, prize: 50, safe: false,
+                level: 5, prize: 50, host: "Moving up!",
                 question: "Як зміниться масова частка речовини, якщо до розчину додати води?",
                 options: ["А) Збільшиться", "Б) Зменшиться", "В) Не зміниться", "Г) Спочатку збільшиться, потім зменшиться"],
                 correct: 1,
                 clue: "При додаванні розчинника (води) кількість речовини не змінюється, а загальна маса розчину зростає, тому частка зменшується."
             },
             {
-                level: 6, prize: 60, safe: false,
+                level: 6, prize: 60, host: "Great job so far!",
                 question: "Скільки солі потрібно взяти для приготування 200 г розчину з масовою часткою 5%?",
                 options: ["А) 100 г", "Б) 20 г", "В) 10 г", "Г) 5 г"],
                 correct: 2,
                 clue: "Масу речовини знаходять множенням маси розчину на частку: 200 * 0.05 = 10 г."
             },
             {
-                level: 7, prize: 70, safe: false,
+                level: 7, prize: 70, host: "On to level 7.",
                 question: "Як називають розчин, у якому масова частка речовини є максимально можливою за даної температури?",
                 options: ["А) Концентрований", "Б) Насичений", "В) Пересичений", "Г) Розбавлений"],
                 correct: 1,
                 clue: "Насичений розчин — це розчин, у якому речовина за даних умов більше не розчиняється."
             },
             {
-                level: 8, prize: 80, safe: true,
+                level: 8, prize: 80, host: "Almost there!",
                 question: "До 150 г розчину з масовою часткою 10% додали 50 г води. Яка нова масова частка?",
                 options: ["А) 8%", "Б) 5%", "В) 10%", "Г) 7.5%"],
                 correct: 3,
                 clue: "Маса чистої речовини = 150 * 0.1 = 15 г. Нова маса розчину = 150 + 50 = 200 г. Нова частка = 15 / 200 = 0.075 або 7.5%."
             },
             {
-                level: 9, prize: 90, safe: false,
+                level: 9, prize: 90, host: "Challenging question!",
                 question: "Фізіологічний розчин — це розчин кухонної солі з масовою часткою:",
                 options: ["А) 9%", "Б) 0.9%", "В) 5%", "Г) 0.1%"],
                 correct: 1,
                 clue: "Фізіологічний розчин (0.9% розчин NaCl) є ізотонічним до плазми крові людини."
             },
             {
-                level: 10, prize: 100, safe: false,
+                level: 10, prize: 100, host: "Level 10!",
                 question: "У 300 г розчину міститься 60 г цукру. Яка масова частка цукру?",
                 options: ["А) 25%", "Б) 10%", "В) 15%", "Г) 20%"],
                 correct: 3,
                 clue: "60 г поділити на 300 г дорівнює 0.2, тобто 20%."
             },
             {
-                level: 11, prize: 120, safe: false,
+                level: 11, prize: 120, host: "Penultimate!",
                 question: "Яка формула використовується для обчислення маси розчину за густиною та об'ємом?",
                 options: ["А) m = V / ρ", "Б) m = V + ρ", "В) m = V * ρ", "Г) m = ρ / V"],
                 correct: 2,
                 clue: "Маса дорівнює добутку об'єму на густину (m = ρV)."
             },
             {
-                level: 12, prize: 150, safe: true,
+                level: 12, prize: 150, host: "The final challenge!",
                 question: "Яку масу цукру треба додати до 100 г розчину з часткою 10%, щоб вона стала 20%?",
                 options: ["А) 20 г", "Б) 10 г", "В) 15 г", "Г) 12.5 г"],
                 correct: 3,
@@ -205,6 +205,36 @@
         let timerSeconds = 30;
         let timerInterval = null;
         let secondChanceActive = false;
+        let pendingNextAction = null;
+
+        function playSound(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'correct') {
+                    osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
+                    osc.frequency.setValueAtTime(880, ctx.currentTime + 0.15); // A5
+                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.4);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(150, ctx.currentTime);
+                    osc.frequency.setValueAtTime(100, ctx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.4);
+                }
+            } catch(e) {
+                // Аудіо контекст може блокуватись браузером до першого кліку
+            }
+        }
 
         function startGame() {
             document.getElementById('start-screen').classList.add('hidden');
@@ -220,6 +250,7 @@
 
             const q = questions[currentLevel];
             document.getElementById('level-badge').innerText = `Рівень ${q.level} із 12`;
+            document.getElementById('host-dialogue').innerText = q.host;
             document.getElementById('question-text').innerText = q.question;
             document.getElementById('current-prize').innerText = score;
 
@@ -255,7 +286,11 @@
                 
                 if (timerSeconds <= 0) {
                     clearInterval(timerInterval);
-                    showModal("Час вийшов!", "На жаль, час на роздуми сплив.", false);
+                    playSound('wrong');
+                    showModal("Час вийшов!", "На жаль, час на роздуми сплив. Продовжуємо далі!", () => {
+                        currentLevel++;
+                        loadQuestion();
+                    });
                 }
             }, 1000);
         }
@@ -266,6 +301,7 @@
             const btn = document.getElementById(`option-${selectedIdx}`);
 
             if (selectedIdx === q.correct) {
+                playSound('correct');
                 btn.classList.remove('bg-slate-800');
                 btn.classList.add('bg-emerald-600', 'border-emerald-400');
                 score = q.prize;
@@ -283,10 +319,11 @@
                 if (secondChanceActive) {
                     secondChanceActive = false;
                     btn.classList.add('opacity-40', 'pointer-events-none');
-                    showModal("Другий шанс!", "Це хибна відповідь, оберіть інший варіант!", null);
+                    showModal("Другий шанс!", "Це хибна відповідь, але у вас є ще одна спроба!", null);
                     return;
                 }
 
+                playSound('wrong');
                 btn.classList.remove('bg-slate-800');
                 btn.classList.add('bg-rose-600', 'border-rose-400');
                 
@@ -294,9 +331,10 @@
                 correctBtn.classList.remove('bg-slate-800');
                 correctBtn.classList.add('bg-emerald-600', 'border-emerald-400');
 
-                setTimeout(() => {
-                    endGame(false);
-                }, 1200);
+                showModal("Неправильна відповідь", `На жаль, це помилка. Правильна відповідь: ${q.options[q.correct].substring(3)}. Гра продовжується!`, () => {
+                    currentLevel++;
+                    loadQuestion();
+                });
             }
         }
 
@@ -316,47 +354,46 @@
 
         function useClue() {
             const q = questions[currentLevel];
-            showModal("💡 Підказка від Професора Сови", q.clue);
+            showModal("💡 Підказка ведучого", q.clue, null);
             event.target.closest('button').disabled = true;
             event.target.closest('button').classList.add('opacity-40');
         }
 
         function useSecondChance() {
             secondChanceActive = true;
-            showModal("🔄 Другий шанс", "У разі помилки ви зможете зробити ще одну спробу.");
+            showModal("🔄 Другий шанс", "У разі помилки ви зможете зробити ще одну спробу на цьому запитанні.", null);
             event.target.closest('button').disabled = true;
             event.target.closest('button').classList.add('opacity-40');
         }
 
         function walkAway() {
             clearInterval(timerInterval);
-            showModal("Гра завершена", `Ви забрали зірки: ⭐ ${score}. Чудовий результат!`);
-            setTimeout(() => location.reload(), 2500);
+            showModal("Гра завершена", `Ви забрали свої зірки: ⭐ ${score}. Чудовий результат!`, () => location.reload());
         }
 
         function endGame(won) {
             clearInterval(timerInterval);
-            let safeScore = 0;
-            questions.forEach(q => {
-                if (q.safe && score >= q.prize) safeScore = q.prize;
-            });
-            const finalScore = won ? score : safeScore;
-
             showModal(
-                won ? "🎉 Перемога!" : "Гру закінчено",
-                won ? `Ви пройшли вікторину і заробили: ⭐ ${score} зірок!` : `Ви набрали гарантовану кількість зірок: ⭐ ${finalScore}. Спробуйте ще раз!`
+                won ? "🎉 Вітаємо!" : "Гру закінчено",
+                won ? `Ви пройшли всі 12 запитань і заробили: ⭐ ${score} зірок!` : `Вікторину завершено! Ваш фінальний результат: ⭐ ${score} зірок.`,
+                () => location.reload()
             );
-            setTimeout(() => location.reload(), 3000);
         }
 
-        function showModal(title, text) {
+        function showModal(title, text, action) {
             document.getElementById('modal-title').innerText = title;
             document.getElementById('modal-text').innerText = text;
             document.getElementById('modal').classList.remove('hidden');
+            pendingNextAction = action;
         }
 
         function closeModal() {
             document.getElementById('modal').classList.add('hidden');
+            if (typeof pendingNextAction === 'function') {
+                const action = pendingNextAction;
+                pendingNextAction = null;
+                action();
+            }
         }
     </script>
 </body>
